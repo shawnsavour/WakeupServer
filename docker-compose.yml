@@ -1,0 +1,12 @@
+version: '3'
+services:
+  wol:
+    # image: "dabondi/go-rest-wol"
+    image: "shawnsavour/wkup:latest"
+    ports:
+      - "8082:8080"
+
+    # Warten auf die neue Version 
+    volumes:
+    #  - ~/.lan/computer.csv:/app/computer.csv
+     - ./computerlist.json:/app/computerlist.json

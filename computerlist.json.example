@@ -1,0 +1,17 @@
+[
+ {
+  "Name": "node-02",
+  "Mac": "2c:f0:5d:33:b7:xx",
+  "BroadcastIPAddress": "172.16.255.255:16"
+ },
+ {
+  "Name": "node-01",
+  "Mac": "2c:f0:5d:33:b7:xx",
+  "BroadcastIPAddress": "172.16.255.255:16"
+ },
+ {
+  "Name": "sondc",
+  "Mac": "2c:f0:5d:33:b7:xx",
+  "BroadcastIPAddress": "172.16.255.255:16"
+ }
+]

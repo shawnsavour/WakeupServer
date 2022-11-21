@@ -1,0 +1,231 @@
+<html>
+  <head>
+    <title>WAKEUPSERVER</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+      .hideMe {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12" role="main">
+          <h1><span class="fa fa-qq"></span> WAKEUPSERVER <small>Your little Monster to Wakeup the lazy one</small></h1>
+            <div id="snackbar" class="alert hideMe">
+              Message comes here
+            </div>
+            <form id="addComputerForm" method="POST" action="/api/computer/add" >
+              <div class="row">
+                <div class="form-group col-4">
+                  <label for="computerName">Computer Name</label>
+                  <input type="text" class="form-control" id="computerName" placeholder="Enter Computer Name">
+                </div>
+                <div class="form-group col-4">
+                  <label for="computerMAC">Computer MAC</label>
+                  <input type="text" class="form-control" id="computerMAC" placeholder="Enter Computer MAC">
+                </div>
+                <div class="form-group col-4">
+                  <label for="computerBroadcastIP">Computer Broadcast IP</label>
+                  <input type="text" class="form-control" id="computerBroadcastIP" placeholder="Enter Computer IP">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Computer</button>
+            </form>
+            <style>
+              /* form split in line */
+              .form-inline .form-group {
+                display: inline-block;
+                margin-bottom: 0;
+                vertical-align: middle;
+              }
+            </style>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>
+                      <b>
+                        <button id="bn_wakeUpAll" name="wolbutton" value="wakeUpAll" class="btn btn-success btn-sm" onclick="$.wakeUpAllComputers()">
+                          <span class="fa fa-qq"></span> WakeUp All
+                        </button>
+                      </b>
+                    </th>
+                    <th>Computer</th>
+                    <th>MAC Adress</th>
+                    <th>Broadcast IP Address</th>
+                    <th>API URL</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{range .}}
+                  <tr>
+                    <td class="align-middle"><b><button id="bn_{{.Name}}" name="wolbutton" value="{{.Name}}" class="btn btn-success btn-sm" onclick="$.wakeUpComputerByName('{{.Name}}')">WakeUp</button></b></td>
+                    <td class="align-middle">{{.Name}}</td>
+                    <td class="align-middle">{{.Mac}}</td>
+                    <td class="align-middle">{{.BroadcastIPAddress}}</td>
+                    <td class="align-middle">/api/wakeup/computer/{{.Name}}</td>
+                    <td class="align-middle">
+                      <button id="bn_delete_{{.Name}}" name="deletebutton" value="{{.Name}}" class="btn btn-danger btn-sm" onclick="$.deleteComputerByName('{{.Name}}')">Delete</button>
+                    </td>
+                  </tr>
+                  {{end}}
+                </tbody>
+              </table>
+              <hr>
+              <p>
+                <h3>REST API Usage</h3>
+                <b>/api/wakeup/computer/<span class="text-info">&lt;ComputerName&gt;</span></b>
+
+                <b>Returns a JSON Object</b>
+                <p>
+                <pre>
+                  {
+                    "success":true,
+                    "message":"Succesfully Wakeup Computer Computer1 with Mac 64-07-2D-BB-BB-BF on Broadcast IP 192.168.10.254:9",
+                    "error":null
+                  }
+                </pre>
+                </p>
+                <dl class="dl-horizontal">
+                  <dt>success</dt>
+                  <dd>True or False if the WakeOnLan Paket was send</dd>
+                  <dt>message</dt>
+                  <dd>Message as string what happen</dd>
+                  <dt>error</dt>
+                  <dd>Encoded Jsonobject from GOLANG Error Object</dd>
+                </dl>
+
+              </p>
+              <hr>
+              <p>
+                <span class="fa fa-github"></span> Project Page: <a href="https://github.com/shawnsavour/WakeupServer">https://github.com/shawnsavour/WakeupServer</a>
+              </p>
+              <p>
+                  <small>Build with <span class="fa fa-heart text-danger" aria-hidden="true"></span> by <a href="https://shawnsavour.com">ShawnSavour</a> <span class="fa fa-github"></span> <a href="https://github.com/shawnsavour">https://github.com/dabondi</a></small>
+              </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script>
+      $(document).ready(function() {
+
+        jQuery.showSnackBar = function(data){
+
+          $('#snackbar').text(data.message);
+          if( data.error != null) {
+            $('#snackbar').addClass('alert-danger');
+            $('#snackbar').removeClass('alert-success')
+          }else{
+            $('#snackbar').removeClass('alert-danger')
+            $('#snackbar').addClass('alert-success')
+          }
+          $('#snackbar').show();
+
+          // After 2 seconds, hide the Div Again
+          setTimeout(function(){
+            $('#snackbar').hide();
+          }, 2000);
+        };
+
+        jQuery.wakeUpComputerByName = function(computerName) {
+          $.ajax({
+            type: "GET",
+            url: "/api/wakeup/computer/" + computerName,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              $.showSnackBar(data);
+            },
+            error: function(data,err)
+            {
+              $.showSnackBar(data);
+              console.error(data);
+            }
+          })
+        };
+
+        // wake all computers
+        jQuery.wakeUpAllComputers = function() {
+          $.ajax({
+            type: "GET",
+            url: "/api/wakeup/all",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              $.showSnackBar(data);
+            },
+            error: function(data,err)
+            {
+              $.showSnackBar(data);
+              console.error(data);
+            }
+          })
+        };
+
+        jQuery.deleteComputerByName = function(computerName) {
+          $.ajax({
+            type: "DELETE",
+            url: "/api/computer/" + computerName,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              $.showSnackBar(data);
+              location.reload();
+            },
+            error: function(data,err)
+            {
+              $.showSnackBar(data);
+              console.error(data);
+            }
+          })
+        };
+
+        // form submit as json
+        $('#addComputerForm').submit(function(e) {
+          e.preventDefault();
+          var computerName = $('#computerName').val();
+          var computerMAC = $('#computerMAC').val();
+          var computerBroadcastIP = $('#computerBroadcastIP').val();
+
+          var data = {
+            "name": computerName,
+            "mac": computerMAC,
+            "broadcastIPAddress": computerBroadcastIP
+          };
+
+          $.ajax({
+            type: "POST",
+            url: "/api/computer/add",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              $.showSnackBar(data);
+            },
+            error: function(data,err)
+            {
+              $.showSnackBar(data);
+              console.error(data);
+            }
+          })
+        });
+
+
+      });
+
+
+
+    </script>
+  </body>
+</html>
