@@ -1,17 +1,17 @@
 [
  {
-  "Name": "node-02",
-  "Mac": "2c:f0:5d:33:b7:xx",
-  "BroadcastIPAddress": "172.16.255.255:16"
+  "Name": "example-01",
+  "Mac": "2c:f0:xx:xx:xx:xx",
+  "BroadcastIPAddress": "255.255.255.255:9"
  },
  {
-  "Name": "node-01",
-  "Mac": "2c:f0:5d:33:b7:xx",
-  "BroadcastIPAddress": "172.16.255.255:16"
+  "Name": "example-02",
+  "Mac": "2c:f0:5d:xx:xx:xx",
+  "BroadcastIPAddress": "255.255.255.255:9"
  },
  {
-  "Name": "sondc",
-  "Mac": "2c:f0:5d:33:b7:xx",
-  "BroadcastIPAddress": "172.16.255.255:16"
+  "Name": "example-03",
+  "Mac": "2c:xx:xx:xx:xx:xx",
+  "BroadcastIPAddress": "255.255.255.255:9"
  }
 ]

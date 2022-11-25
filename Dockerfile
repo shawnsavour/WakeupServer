@@ -1,7 +1,7 @@
 FROM golang:alpine3.16 AS builder
 
-LABEL org.label-schema.vcs-url="https://github.com/daBONDi/go-rest-wol" \
-      org.label-schema.url="https://github.com/daBONDi/go-rest-wol/blob/master/README.md"
+LABEL org.label-schema.vcs-url="https://github.com/shawnsavour/WakeupServer" \
+      org.label-schema.url="https://github.com/shawnsavour/WakeupServer/blob/master/README.md"
 
 RUN mkdir /app
 ADD . /app/
@@ -24,7 +24,7 @@ COPY --from=builder /app/pages/index.html ./pages/index.html
 COPY --from=builder /app/computerlist.json.example ./computerlist.json
 COPY --from=builder /app/go-rest-wol .
 
-ENV WOLHTTPPORT=8080
+ENV WOLHTTPPORT=8686
 # ENV WOLFILE=computer.csv
 ENV WOLFILE=computerlist.json
 

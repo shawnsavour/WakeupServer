@@ -1,12 +1,17 @@
 version: '3'
+# network host
 services:
   wol:
-    # image: "dabondi/go-rest-wol"
-    image: "shawnsavour/wkup:latest"
-    ports:
-      - "8082:8080"
-
+    image: "shawnsavour/wkup:p-8686"
+    # cannot use port if you are using network_mode: host
+    # ports:
+    #   - "8082:8686"
+    network_mode: "host"
+    container_name: "WakeupServer"
+    restart: always
     # Warten auf die neue Version 
     volumes:
-    #  - ~/.lan/computer.csv:/app/computer.csv
-     - ./computerlist.json:/app/computerlist.json
+      # make sure you copy computerlist.json.example to computerlist.json
+      # Download from Vaultwarden WakeupServer
+      - ./computerlist.json:/app/computerlist.json
+    

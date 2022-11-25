@@ -2,6 +2,7 @@
 package main
 
 //DefaultHTTPPort defines the Default HTTP Port to listen
+// read port from environment variable
 const DefaultHTTPPort int = 8080
 
 //DefaultComputerFilePath defines the Default File Path to search for the Computer List
