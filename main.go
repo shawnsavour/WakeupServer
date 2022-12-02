@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"regexp"
 )
 
 // ComputerList contains all Computers who we can use to work with
