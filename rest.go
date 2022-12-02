@@ -220,12 +220,12 @@ func restCheckComputerOnline(w http.ResponseWriter, r *http.Request) {
 				if isOnline(mac) {
 					// Horray we send the WOL Packet succesfully
 					result.Success = true
-					result.Message = fmt.Sprintf("Computer %s with IP %s is online", c.Name, getIpFromMac(mac))
+					result.Message = fmt.Sprintf("Computer %s with IP %s is online", c.Name, isOnline(mac))
 					result.ErrorObject = nil
 				} else {
 					// Computer is not online
 					result.Success = false
-					result.Message = fmt.Sprintf("Computer %s with IP %s is offline", c.Name, getIpFromMac(mac))
+					result.Message = fmt.Sprintf("Computer %s with IP %s is offline", c.Name, isOnline(mac))
 					result.ErrorObject = nil
 				}
 			}
