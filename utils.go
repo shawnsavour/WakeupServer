@@ -4,7 +4,6 @@ package main
 
 import (
 	"log"
-	"net"
 	"regexp"
 	"os/exec"
 )
@@ -20,16 +19,25 @@ func getIpFromMac(mac string) string {
 		log.Fatal(err)
 	}
 	regex := "\\(([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})\\).*" + mac
-	r, _ := regexp.Compile(regex)
-	ip := r.FindStringSubmatch(string(out))[1] 
-	return ip
+	// if regex find true
+	if matched, _ := regexp.MatchString(regex, string(out)); matched {
+		// get ip from regex
+		r, _ := regexp.Compile(regex)
+		
+		return r.FindStringSubmatch(string(out))[1]
+	} else {
+		log.Fatal("No ip found for mac address")
+	}
+	return ""
 }
 
 // check if machine is on
 func isOnline(ip string) bool {
-	_, err := net.DialTimeout("tcp", ip+":80", 1)
-	if err != nil {
+	log.Println("Checking if ip " + ip + " machine is online")
+	// if ping is success return true
+	if _, err := exec.Command("ping", "-c", "1", ip).Output(); err == nil {
+		return true
+	} else {
 		return false
 	}
-	return true
 }
