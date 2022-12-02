@@ -75,8 +75,9 @@ func getIpFromMac(mac string) string {
 		log.Fatal(err)
 	}
 	// regex := "\(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\).*4e:c4:03:2c:3d:92"
-	regex := "\(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\).*" + mac
-	ip, _:= regexp.MatchString(string(out), regex)
+	regex := "\\(([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})\\).*" + mac
+	r, _ := regexp.Compile(regex)
+	ip := r.FindStringSubmatch(string(out))[1] 
 	log.Println(ip)
 	return ip
 }
