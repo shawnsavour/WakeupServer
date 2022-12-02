@@ -14,6 +14,7 @@ var ComputerList []Computer
 
 func main() {
 	log.Println("Starting WakeOnLan Server")
+	runArp()
 	log.Println(getIpFromMac("2c:f0:5d:33:b7:ab"))
 	log.Println("=========================")
 	// Start Processing Shell Arguments or use Default Values defined in const.go
@@ -62,5 +63,16 @@ func getIpFromMac(mac string) string {
 	if err != nil {
 		log.Println(err.Error())
 	}
+	log.Println(string(out))
+	return string(out)
+}
+
+func runArp() string {
+	cmd := exec.Command("arp", "-a")
+	out, err := cmd.Output()
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println(string(out))
 	return string(out)
 }
