@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+	"os/exec"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -13,7 +13,9 @@ import (
 var ComputerList []Computer
 
 func main() {
-
+	log.Println("Starting WakeOnLan Server")
+	log.Println(getIpFromMac("2c:f0:5d:33:b7:ab"))
+	log.Println("=========================")
 	// Start Processing Shell Arguments or use Default Values defined in const.go
 	httpPort, computerFilePath := processShellArgs()
 
@@ -43,6 +45,7 @@ func main() {
 	// Delete a Computer from the ComputerList
 	router.HandleFunc("/api/computer/{computerName}", restDeleteComputer).Methods("DELETE")
 	// check if computer is online
+	// router.HandleFunc("/api/computer/{computerName}/online", restCheckComputerOnline).Methods("GET")
 	// router.HandleFunc("/api/check/computer/{computerName}", restCheckComputer).Methods("GET")
 
 	// Setup Webserver
@@ -50,4 +53,14 @@ func main() {
 	log.Printf("Startup Webserver on \"%s\"", httpListen)
 
 	log.Fatal(http.ListenAndServe(httpListen, handlers.RecoveryHandler(handlers.PrintRecoveryStack(true))(router)))
+}
+
+//  using os exec command arp to get first ip from mac
+func getIpFromMac(mac string) string {
+	cmd := exec.Command("arp", "-a | grep " + mac)
+	out, err := cmd.Output()
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return string(out)
 }
