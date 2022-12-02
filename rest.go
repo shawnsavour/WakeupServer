@@ -190,59 +190,52 @@ func saveComputerList() {
 }
 
 // check if computer is online
-// func restCheckComputerOnline(w http.ResponseWriter, r *http.Request) {
+func restCheckComputerOnline(w http.ResponseWriter, r *http.Request) {
 
-// 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
-// 	var result WakeUpResponseObject
-// 	result.Success = false
+	var result WakeUpResponseObject
+	result.Success = false
 
-// 	// Get computer name from URL
-// 	vars := mux.Vars(r)
-// 	computerName := vars["computerName"]
+	// Get computer name from URL
+	vars := mux.Vars(r)
+	computerName := vars["computerName"]
 
-// 	// Ensure computerName is not empty
-// 	if computerName == "" {
+	// Ensure computerName is not empty
+	if computerName == "" {
 
-// 		result.Message = "Empty Computername is not allowed"
-// 		result.ErrorObject = nil
-// 		w.WriteHeader(http.StatusBadRequest)
+		result.Message = "Empty Computername is not allowed"
+		result.ErrorObject = nil
+		w.WriteHeader(http.StatusBadRequest)
 
-// 	} else {
+	} else {
 
-// 		// Get Computer from List
-// 		for _, c := range ComputerList {
-// 			if c.Name == computerName {
+		// Get Computer from List
+		for _, c := range ComputerList {
+			if c.Name == computerName {
 
-// 				// We found the Computername
-// 				// check if computer is online
-// 				if isOnline(c.IPAddress) {
-// 					// Horray we send the WOL Packet succesfully
-// 					result.Success = true
-// 					result.Message = fmt.Sprintf("Computer %s with IP %s is online", c.Name, c.IPAddress)
-// 					result.ErrorObject = nil
-// 				} else {
-// 					// Computer is not online
-// 					result.Success = false
-// 					result.Message = fmt.Sprintf("Computer %s with IP %s is offline", c.Name, c.IPAddress)
-// 					result.ErrorObject = nil
-// 				}
-// 			}
-// 		}
+				// We found the Computername
+				// check if computer is online
+				mac := getIpFromMac(c.Mac)
+				if isOnline(mac) {
+					// Horray we send the WOL Packet succesfully
+					result.Success = true
+					result.Message = fmt.Sprintf("Computer %s with IP %s is online", c.Name, getIpFromMac(mac))
+					result.ErrorObject = nil
+				} else {
+					// Computer is not online
+					result.Success = false
+					result.Message = fmt.Sprintf("Computer %s with IP %s is offline", c.Name, getIpFromMac(mac))
+					result.ErrorObject = nil
+				}
+			}
+		}
 
-// 		if result.Success == false && result.ErrorObject == nil {
-// 			// We could not find the Computername
-// 			w.WriteHeader(http.StatusNotFound)
-// 			result.Message = fmt.Sprintf("Computername %s could not be found", computerName)
-// 		}
-// 	}
-// 	json.NewEncoder(w).Encode(result)
-// }
-
-// func isOnline(ip string) bool {
-// 	_, err := net.DialTimeout("tcp", ip+":22", 1*time.Second)
-// 	if err != nil {
-// 		return false
-// 	}
-// 	return true
-// }
+		if result.Success == false && result.ErrorObject == nil {
+			// We could not find the Computername
+			w.WriteHeader(http.StatusNotFound)
+			result.Message = fmt.Sprintf("Computername %s could not be found", computerName)
+		}
+	}
+	json.NewEncoder(w).Encode(result)
+}
